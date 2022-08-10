@@ -16,7 +16,7 @@ app.get('/:id', (req, res) => {
   try{
     res.json(requestedStudent)
   }catch{
-    res.send("Not Found")
+    res.status(404).send("Not Found")
   }
 })
 
