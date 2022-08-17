@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express()
+const students = require('../studentsInfo')
 
-const students = []
+// const students = []
 
 
 // get
@@ -9,15 +10,15 @@ app.get('/', (req, res) => {
   res.json(students)
 })
 
-app.get('/:id', (req, res) => {
+app.get('/:name', (req, res) => {
 
-  const {id} = req.params
-  const requestedStudent = students.find(student => {return student.id === id})
+  const {name} = req.params
+  const requestedStudent = students.find(student => {return student.name === name})
 
-  try{
+  if(requestedStudent){
     res.json(requestedStudent)
-  }catch(error){
-    res.status(404).send("Not Found")
+  }else{
+    res.status(404).json("Not Found")
   }
 })
 
@@ -30,19 +31,17 @@ app.post('/', (req, res) => {
   const student = {
     name: req.body.name,
     age: req.body.age,
-    id: students.length + 1
   }
 
   const existingStudent = students.find(student => {
-    student.name === req.body.name
+    return student.name === req.body.name
   })
-  console.log(existingStudent)
 
   if(!existingStudent){
     students.push(student)
     res.status(201).json(student)
   }else{
-    res.status(409).send('Student already exists')
+    res.status(409).json('student already exists')
   }
 })
 
